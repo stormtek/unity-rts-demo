@@ -2,7 +2,12 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/WorldObject/WorldObject.cs">
     <Files>
-      <File FileName="Assets/WorldObject/WorldObject.cs" Line="26" Column="2" />
+      <File FileName="Assets/WorldObject/WorldObject.cs" Line="35" Column="43" />
+      <File FileName="Assets/WorldObject/Building/Building.cs" Line="23" Column="1" />
+      <File FileName="Assets/Player/UserInput.cs" Line="105" Column="5" />
+      <File FileName="Assets/Player/Player.cs" Line="9" Column="49" />
+      <File FileName="Assets/Player/HUD/HUD.cs" Line="22" Column="20" />
+      <File FileName="Assets/RTS/ResourceManager.cs" Line="15" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
