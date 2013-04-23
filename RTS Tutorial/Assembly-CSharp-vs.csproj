@@ -48,7 +48,9 @@
      <Compile Include="Assets\Player\Player.cs" />
      <Compile Include="Assets\Player\UserInput.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />
+     <Compile Include="Assets\RTS\WorkManager.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Unit.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
