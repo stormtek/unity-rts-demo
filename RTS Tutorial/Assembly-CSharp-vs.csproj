@@ -47,6 +47,7 @@
      <Compile Include="Assets\Player\HUD\HUD.cs" />
      <Compile Include="Assets\Player\Player.cs" />
      <Compile Include="Assets\Player\UserInput.cs" />
+     <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />
      <Compile Include="Assets\RTS\WorkManager.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
