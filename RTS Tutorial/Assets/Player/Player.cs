@@ -59,4 +59,10 @@ public class Player : MonoBehaviour {
 	public void IncrementResourceLimit(ResourceType type, int amount) {
 		resourceLimits[type] += amount;
 	}
+	
+	public void AddUnit(string unitName, Vector3 spawnPoint, Quaternion rotation) {
+		Units units = GetComponentInChildren<Units>();
+		GameObject newUnit = (GameObject)Instantiate(ResourceManager.GetUnit(unitName),spawnPoint, rotation);
+		newUnit.transform.parent = units.transform;
+	}
 }

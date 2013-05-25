@@ -50,8 +50,13 @@
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />
      <Compile Include="Assets\RTS\WorkManager.cs" />
+     <Compile Include="Assets\Resources\GameObjectList.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
+     <Compile Include="Assets\WorldObject\Building\Buildings.cs" />
+     <Compile Include="Assets\WorldObject\Building\WarFactory\WarFactory.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Tank\Tank.cs" />
      <Compile Include="Assets\WorldObject\Unit\Unit.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Units.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

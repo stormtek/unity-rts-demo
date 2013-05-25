@@ -42,6 +42,7 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	public string[] GetActions() {
+		//should we be checking that the player who owns this is the one who asked for this???
 		return actions;
 	}
 	
