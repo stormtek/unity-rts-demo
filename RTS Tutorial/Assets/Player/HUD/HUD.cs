@@ -125,14 +125,16 @@ public class HUD : MonoBehaviour {
 		string selectionName = "";
 		if(player.SelectedObject) {
 			selectionName = player.SelectedObject.objectName;
-			//reset slider value if the selected object has changed
-			if(lastSelection && lastSelection != player.SelectedObject) sliderValue = 0.0f;
-			DrawActions(player.SelectedObject.GetActions());
-			//store the current selection
-			lastSelection = player.SelectedObject;
-			Building selectedBuilding = lastSelection.GetComponent<Building>();
-			if(selectedBuilding) {
-				DrawBuildQueue(selectedBuilding.getBuildQueueValues(), selectedBuilding.getBuildPercentage());
+			if(player.SelectedObject.IsOwnedBy(player)){
+				//reset slider value if the selected object has changed
+				if(lastSelection && lastSelection != player.SelectedObject) sliderValue = 0.0f;
+				DrawActions(player.SelectedObject.GetActions());
+				//store the current selection
+				lastSelection = player.SelectedObject;
+				Building selectedBuilding = lastSelection.GetComponent<Building>();
+				if(selectedBuilding) {
+					DrawBuildQueue(selectedBuilding.getBuildQueueValues(), selectedBuilding.getBuildPercentage());
+				}
 			}
 		}
 		if(!selectionName.Equals("")) {
