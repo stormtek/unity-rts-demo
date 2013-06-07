@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\Player\HUD\HUD.cs" />
      <Compile Include="Assets\Player\Player.cs" />
+     <Compile Include="Assets\Player\RallyPoint\RallyPoint.cs" />
      <Compile Include="Assets\Player\UserInput.cs" />
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />

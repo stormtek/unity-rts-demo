@@ -36,7 +36,7 @@ public class WorldObject : MonoBehaviour {
 
 	/*** Public methods ***/
 	
-	public void SetSelection(bool selected, Rect playingArea) {
+	public virtual void SetSelection(bool selected, Rect playingArea) {
 		currentlySelected = selected;
 		if(selected) this.playingArea = playingArea;
 	}
