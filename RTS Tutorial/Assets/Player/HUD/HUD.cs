@@ -8,9 +8,10 @@ public class HUD : MonoBehaviour {
 	public Texture2D activeCursor;
 	public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor, rallyPointCursor;
 	public Texture2D[] attackCursors, harvestCursors, moveCursors;
-	public Texture2D[] resources;
+	public Texture2D[] resources, resourceHealthBars;
 	public Texture2D buttonHover, buttonClick, smallButtonHover, smallButtonClick;
 	public Texture2D buildFrame, buildMask;
+	public Texture2D healthy, damaged, critical;
 	
 	private Player player;
 	private CursorState activeCursorState, previousCursorState;
@@ -47,8 +48,18 @@ public class HUD : MonoBehaviour {
 				default: break;
 			}
 		}
+		Dictionary<ResourceType, Texture2D> resourceHealthBarTextures = new Dictionary<ResourceType, Texture2D>();
+		for(int i=0; i<resourceHealthBars.Length; i++) {
+			switch(resourceHealthBars[i].name) {
+			case "ore":
+				resourceHealthBarTextures.Add(ResourceType.Ore, resourceHealthBars[i]);
+				break;
+			default: break;
+			}
+		}
+		ResourceManager.SetResourceHealthBarTextures(resourceHealthBarTextures);
 		buildAreaHeight = Screen.height - RESOURCE_BAR_HEIGHT - SELECTION_NAME_HEIGHT - 2 * BUTTON_SPACING;
-		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
+		ResourceManager.StoreSelectBoxItems(selectBoxSkin, healthy, damaged, critical);
 		SetCursorState(CursorState.Select);
 	}
 

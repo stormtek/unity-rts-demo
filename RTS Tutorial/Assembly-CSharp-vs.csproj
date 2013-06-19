@@ -54,7 +54,13 @@
      <Compile Include="Assets\Resources\GameObjectList.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
      <Compile Include="Assets\WorldObject\Building\Buildings.cs" />
+     <Compile Include="Assets\WorldObject\Building\Refinery\Refinery.cs" />
      <Compile Include="Assets\WorldObject\Building\WarFactory\WarFactory.cs" />
+     <Compile Include="Assets\WorldObject\Resource\OreDeposit\Ore.cs" />
+     <Compile Include="Assets\WorldObject\Resource\OreDeposit\OreDeposit.cs" />
+     <Compile Include="Assets\WorldObject\Resource\Resource.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Harvester\Arms.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Harvester\Harvester.cs" />
      <Compile Include="Assets\WorldObject\Unit\Tank\Tank.cs" />
      <Compile Include="Assets\WorldObject\Unit\Unit.cs" />
      <Compile Include="Assets\WorldObject\Unit\Units.cs" />
