@@ -57,8 +57,10 @@ public class Unit : WorldObject {
 		//only handle input if owned by a human player and currently selected
 		if(player && player.human && currentlySelected) {
 			bool clickedOnEmptyResource = false;
-			Resource resource = hitObject.transform.parent.GetComponent<Resource>();
-			if(resource && resource.isEmpty()) clickedOnEmptyResource = true;
+			if(hitObject.transform.parent) {
+				Resource resource = hitObject.transform.parent.GetComponent<Resource>();
+				if(resource && resource.isEmpty()) clickedOnEmptyResource = true;
+			}
 			if((hitObject.name == "Ground" || clickedOnEmptyResource) && hitPoint != ResourceManager.InvalidPosition) {
 				float x = hitPoint.x;
 				//makes sure that the unit stays on top of the surface it is on
