@@ -52,9 +52,9 @@ public class Harvester : Unit {
 	
 	/* Public Methods */
 	
-	public override void Init (Building creator) {
-		base.Init (creator);
-		resourceStore = creator;
+	public override void SetBuilding (Building store) {
+		base.SetBuilding (store);
+		resourceStore = store;
 	}
 	
 	public override void SetHoverState(GameObject hoverObject) {

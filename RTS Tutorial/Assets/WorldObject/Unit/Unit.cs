@@ -33,7 +33,7 @@ public class Unit : WorldObject {
 	
 	/* Public Methods */
 	
-	public virtual void Init(Building creator) {
+	public virtual void SetBuilding(Building building) {
 		//specific initialization for a unit can be specified here
 	}
 	
@@ -72,7 +72,7 @@ public class Unit : WorldObject {
 		}
 	}
 	
-	public void StartMove(Vector3 destination) {
+	public virtual void StartMove(Vector3 destination) {
 		this.destination = destination;
 		destinationTarget = null;
 		targetRotation = Quaternion.LookRotation (destination - transform.position);

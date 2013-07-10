@@ -64,6 +64,7 @@
      <Compile Include="Assets\WorldObject\Unit\Tank\Tank.cs" />
      <Compile Include="Assets\WorldObject\Unit\Unit.cs" />
      <Compile Include="Assets\WorldObject\Unit\Units.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Worker\Worker.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

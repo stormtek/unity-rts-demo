@@ -105,16 +105,20 @@ public class UserInput : MonoBehaviour {
 	
 	private void LeftMouseClick() {
 		if(player.hud.MouseInBounds()) {
-			GameObject hitObject = FindHitObject();
-			Vector3 hitPoint = FindHitPoint();
-			if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
-				if(player.SelectedObject) player.SelectedObject.MouseClick(hitObject, hitPoint, player);
-				else if(hitObject.name != "Ground") {
-					WorldObject worldObject = hitObject.transform.parent.GetComponent<WorldObject>();
-					if(worldObject) {
-						//we already know the player has no selected object
-						player.SelectedObject = worldObject;
-						worldObject.SetSelection(true, player.hud.GetPlayingArea());
+			if(player.IsFindingBuildingLocation()) {
+				if(player.CanPlaceBuilding()) player.StartConstruction();
+			} else {
+				GameObject hitObject = WorkManager.FindHitObject(Input.mousePosition);
+				Vector3 hitPoint = WorkManager.FindHitPoint(Input.mousePosition);
+				if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
+					if(player.SelectedObject) player.SelectedObject.MouseClick(hitObject, hitPoint, player);
+					else if(hitObject.name != "Ground") {
+						WorldObject worldObject = hitObject.transform.parent.GetComponent<WorldObject>();
+						if(worldObject) {
+							//we already know the player has no selected object
+							player.SelectedObject = worldObject;
+							worldObject.SetSelection(true, player.hud.GetPlayingArea());
+						}
 					}
 				}
 			}
@@ -123,39 +127,33 @@ public class UserInput : MonoBehaviour {
 	
 	private void RightMouseClick() {
 		if(player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.SelectedObject) {
-			player.SelectedObject.SetSelection(false, player.hud.GetPlayingArea());
-			player.SelectedObject = null;
+			if(player.IsFindingBuildingLocation()) {
+				player.CancelBuildingPlacement();
+			} else {
+				player.SelectedObject.SetSelection(false, player.hud.GetPlayingArea());
+				player.SelectedObject = null;
+			}
 		}
 	}
 	
 	private void MouseHover() {
 		if(player.hud.MouseInBounds()) {
-			GameObject hoverObject = FindHitObject();
-			if(hoverObject) {
-				if(player.SelectedObject) player.SelectedObject.SetHoverState(hoverObject);
-				else if(hoverObject.name != "Ground") {
-					Player owner = hoverObject.transform.root.GetComponent<Player>();
-					if(owner) {
-						Unit unit = hoverObject.transform.parent.GetComponent<Unit>();
-						Building building = hoverObject.transform.parent.GetComponent<Building>();
-						if(owner.username == player.username && (unit || building)) player.hud.SetCursorState(CursorState.Select);
+			if(player.IsFindingBuildingLocation()) {
+				player.FindBuildingLocation();
+			} else {
+				GameObject hoverObject = WorkManager.FindHitObject(Input.mousePosition);
+				if(hoverObject) {
+					if(player.SelectedObject) player.SelectedObject.SetHoverState(hoverObject);
+					else if(hoverObject.name != "Ground") {
+						Player owner = hoverObject.transform.root.GetComponent<Player>();
+						if(owner) {
+							Unit unit = hoverObject.transform.parent.GetComponent<Unit>();
+							Building building = hoverObject.transform.parent.GetComponent<Building>();
+							if(owner.username == player.username && (unit || building)) player.hud.SetCursorState(CursorState.Select);
+						}
 					}
 				}
 			}
 		}
-	}
-	
-	private GameObject FindHitObject() {
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit)) return hit.collider.gameObject;
-		return null;
-	}
-	
-	private Vector3 FindHitPoint() {
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit)) return hit.point;
-		return ResourceManager.InvalidPosition;
 	}
 }
