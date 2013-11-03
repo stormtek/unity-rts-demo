@@ -4,7 +4,7 @@ using RTS;
 
 public class Building : WorldObject {
 	
-	public float maxBuildProgress;
+	public float maxBuildProgress = 10.0f;
 	public Texture2D rallyPointImage, sellImage;
 	
 	protected Vector3 spawnPoint, rallyPoint;
@@ -139,6 +139,7 @@ public class Building : WorldObject {
 			hitPoints = maxHitPoints;
 			needsBuilding = false;
 			RestoreMaterials();
+			SetTeamColor();
 		}
 	}
 	

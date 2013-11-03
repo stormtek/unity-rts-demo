@@ -3,7 +3,7 @@ using RTS;
 
 public class Unit : WorldObject {
 	
-	public float moveSpeed, rotateSpeed;
+	public float moveSpeed = 5, rotateSpeed = 2;
 	
 	protected bool moving, rotating;
 	
@@ -78,6 +78,7 @@ public class Unit : WorldObject {
 		targetRotation = Quaternion.LookRotation (destination - transform.position);
 		rotating = true;
 		moving = false;
+		attacking = false;
 	}
 	
 	public void StartMove(Vector3 destination, GameObject destinationTarget) {
@@ -133,7 +134,10 @@ public class Unit : WorldObject {
 	
 	private void MakeMove() {
 		transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
-		if(transform.position == destination) moving = false;
+		if(transform.position == destination) {
+			moving = false;
+			movingIntoPosition = false;
+		}
 		CalculateBounds();
 	}
 }

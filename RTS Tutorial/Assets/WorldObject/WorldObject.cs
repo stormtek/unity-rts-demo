@@ -5,9 +5,10 @@ using System.Collections.Generic;
 public class WorldObject : MonoBehaviour {
 	
 	//Public variables
-	public string objectName;
+	public string objectName = "WorldObject";
 	public Texture2D buildImage;
-	public int cost, sellValue, hitPoints, maxHitPoints;
+	public int cost = 100, sellValue = 10, hitPoints = 100, maxHitPoints = 100;
+	public float weaponRange = 10.0f, weaponRechargeTime = 1.0f, weaponAimSpeed = 1.0f;
 	
 	//Variables accessible by subclass
 	protected Player player;
@@ -17,23 +18,29 @@ public class WorldObject : MonoBehaviour {
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
 	protected GUIStyle healthStyle = new GUIStyle();
 	protected float healthPercentage = 1.0f;
+	protected WorldObject target = null;
+	protected bool attacking = false, movingIntoPosition = false, aiming = false;
 	
 	//Private variables
 	private List<Material> oldMaterials = new List<Material>();
+	private float currentWeaponChargeTime;
 	
 	/*** Game Engine methods, all can be overridden by subclass ***/
 	
 	protected virtual void Awake() {
 		selectionBounds = ResourceManager.InvalidBounds;
 		CalculateBounds();
+		currentWeaponChargeTime = weaponRechargeTime;
 	}
 	
 	protected virtual void Start () {
 		SetPlayer();
+		if(player) SetTeamColor();
 	}
 
 	protected virtual void Update () {
-	
+		currentWeaponChargeTime += Time.deltaTime;
+		if(attacking && !movingIntoPosition && !aiming) PerformAttack();
 	}
 	
 	protected virtual void OnGUI() {
@@ -72,7 +79,14 @@ public class WorldObject : MonoBehaviour {
 			if(worldObject) {
 				Resource resource = hitObject.transform.parent.GetComponent<Resource>();
 				if(resource && resource.isEmpty()) return;
-				ChangeSelection(worldObject, controller);
+				Player owner = hitObject.transform.root.GetComponent<Player>();
+				if(owner) { //the object is controlled by a player
+					if(player && player.human) { //this object is controlled by a human player
+						//start attack if object is not owned by the same player and this object can attack, else select
+						if(player.username != owner.username && CanAttack()) BeginAttack(worldObject);
+						else ChangeSelection(worldObject, controller);
+					} else ChangeSelection(worldObject, controller);
+				} else ChangeSelection(worldObject, controller);
 			}
 		}
 	}
@@ -80,7 +94,18 @@ public class WorldObject : MonoBehaviour {
 	public virtual void SetHoverState(GameObject hoverObject) {
 		//only handle input if owned by a human player and currently selected
 		if(player && player.human && currentlySelected) {
-			if(hoverObject.name != "Ground") player.hud.SetCursorState(CursorState.Select);
+			//something other than the ground is being hovered over
+			if(hoverObject.name != "Ground") {
+				Player owner = hoverObject.transform.root.GetComponent<Player>();
+				Unit unit = hoverObject.transform.parent.GetComponent<Unit>();
+				Building building = hoverObject.transform.parent.GetComponent<Building>();
+				if(owner) { //the object is owned by a player
+					if(owner.username == player.username) player.hud.SetCursorState(CursorState.Select);
+					else if(CanAttack()) player.hud.SetCursorState(CursorState.Attack);
+					else player.hud.SetCursorState(CursorState.Select);
+				} else if(unit || building && CanAttack()) player.hud.SetCursorState(CursorState.Attack);
+				else player.hud.SetCursorState(CursorState.Select);
+			}
 		}
 	}
 	
@@ -126,6 +151,21 @@ public class WorldObject : MonoBehaviour {
 		}
 	}
 	
+	public virtual bool CanAttack() {
+		//default behaviour needs to be overidden by children
+		return false;
+	}
+	
+	public virtual bool CanMove() {
+		//default behaviour needs to be overidden by children
+		return false;
+	}
+	
+	public void TakeDamage(int damage) {
+		hitPoints -= damage;
+		if(hitPoints<=0) Destroy(gameObject);
+	}
+	
 	/*** Private worker methods ***/
 	
 	private void ChangeSelection(WorldObject worldObject, Player controller) {
@@ -143,6 +183,63 @@ public class WorldObject : MonoBehaviour {
 		GUI.BeginGroup(playingArea);
 		DrawSelectionBox(selectBox);
 		GUI.EndGroup();
+	}
+	
+	private void BeginAttack(WorldObject target) {
+		this.target = target;
+		if(TargetInRange()) {
+			attacking = true;
+			PerformAttack();
+		} else AdjustPosition();
+	}
+	
+	private void PerformAttack() {
+		if(!target) {
+			attacking = false;
+			return;
+		}
+		if(!TargetInRange()) AdjustPosition();
+		else if(!TargetInFrontOfWeapon()) AimAtTarget();
+		else if(ReadyToFire()) UseWeapon();
+	}
+	
+	private bool TargetInRange() {
+		Vector3 targetLocation = target.transform.position;
+		Vector3 direction = targetLocation - transform.position;
+		if(direction.sqrMagnitude < weaponRange * weaponRange) {
+			return true;
+		}
+		return false;
+	}
+	
+	private bool TargetInFrontOfWeapon() {
+		Vector3 targetLocation = target.transform.position;
+		Vector3 direction = targetLocation - transform.position;
+		if(direction.normalized == transform.forward.normalized) return true;
+		else return false;
+	}
+	
+	private Vector3 FindNearestAttackPosition() {
+		Vector3 targetLocation = target.transform.position;
+		Vector3 direction = targetLocation - transform.position;
+		float targetDistance = direction.magnitude;
+		float distanceToTravel = targetDistance - (0.9f * weaponRange);
+		return Vector3.Lerp(transform.position, targetLocation, distanceToTravel / targetDistance);
+	}
+	
+	private void AdjustPosition() {
+		Unit self = this as Unit;
+		if(self) {
+			movingIntoPosition = true;
+			Vector3 attackPosition = FindNearestAttackPosition();
+			self.StartMove(attackPosition);
+			attacking = true;
+		} else attacking = false;
+	}
+	
+	private bool ReadyToFire() {
+		if(currentWeaponChargeTime >= weaponRechargeTime) return true;
+		return false;
 	}
 	
 	/* Internal worker methods that can be accessed by subclass */
@@ -164,5 +261,20 @@ public class WorldObject : MonoBehaviour {
 		healthStyle.padding.top = -20;
 		healthStyle.fontStyle = FontStyle.Bold;
 		GUI.Label(new Rect(selectBox.x, selectBox.y - 7, selectBox.width * healthPercentage, 5), label, healthStyle);
+	}
+	
+	protected void SetTeamColor() {
+		TeamColor[] teamColors = GetComponentsInChildren<TeamColor>();
+		foreach(TeamColor teamColor in teamColors) teamColor.renderer.material.color = player.teamColor;
+	}
+	
+	protected virtual void UseWeapon() {
+		currentWeaponChargeTime = 0.0f;
+		//this behaviour needs to be specified by a specific object
+	}
+	
+	protected virtual void AimAtTarget() {
+		aiming = true;
+		//this behaviour needs to be specified by a specific object
 	}
 }
