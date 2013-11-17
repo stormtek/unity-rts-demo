@@ -13,11 +13,20 @@ public class UserInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(player.human) {
+		if(player && player.human) {
+			if(Input.GetKeyDown(KeyCode.Escape)) OpenPauseMenu();
 			MoveCamera();
 			RotateCamera();
 			MouseActivity();
 		}
+	}
+	
+	private void OpenPauseMenu() {
+		Time.timeScale = 0.0f;
+		GetComponentInChildren<PauseMenu>().enabled = true;
+		GetComponent<UserInput>().enabled = false;
+		Screen.showCursor = true;
+		ResourceManager.MenuOpen = true;
 	}
 	
 	private void MoveCamera() {

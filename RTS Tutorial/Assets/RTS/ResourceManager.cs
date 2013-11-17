@@ -15,6 +15,20 @@ namespace RTS {
 		public static Vector3 InvalidPosition { get { return invalidPosition; } }
 		public static Bounds InvalidBounds { get { return invalidBounds; } }
 		
+		public static bool MenuOpen { get; set; }
+		
+		private static float buttonHeight = 40;
+		private static float headerHeight = 32, headerWidth = 256;
+		private static float textHeight = 25, padding = 10;
+		public static float PauseMenuHeight { get { return headerHeight + 2 * buttonHeight + 4 * padding; } }
+		public static float MenuWidth { get { return headerWidth + 2 * padding; } }
+		public static float ButtonHeight { get { return buttonHeight; } }
+		public static float ButtonWidth { get { return (MenuWidth - 3 * padding) / 2; } }
+		public static float HeaderHeight { get { return headerHeight; } }
+		public static float HeaderWidth { get { return headerWidth; } }
+		public static float TextHeight { get { return textHeight; } }
+		public static float Padding { get { return padding; } }
+		
 		private static GUISkin selectBoxSkin;
 		public static GUISkin SelectBoxSkin { get { return selectBoxSkin; } }
 		

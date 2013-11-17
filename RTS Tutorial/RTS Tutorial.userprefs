@@ -1,21 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/WorldObject/Unit/Tank/Tank.cs">
-    <Files>
-      <File FileName="Assets/RTS/WorkManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/RTS/ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/WorldObject/WorldObject.cs" Line="22" Column="62" />
-      <File FileName="Assets/Player/HUD/HUD.cs" Line="1" Column="1" />
-      <File FileName="Assets/RTS/Enums.cs" Line="1" Column="1" />
-      <File FileName="Assets/Player/Player.cs" Line="1" Column="1" />
-      <File FileName="Assets/WorldObject/Unit/Tank/Tank.cs" Line="29" Column="2" />
-      <File FileName="Assets/WorldObject/Unit/Tank/TankProjectile.cs" Line="4" Column="44" />
-      <File FileName="Assets/WorldObject/Projectile.cs" Line="42" Column="2" />
-      <File FileName="Assets/WorldObject/Unit/Unit.cs" Line="1" Column="1" />
-      <File FileName="Assets/Resources/GameObjectList.cs" Line="1" Column="1" />
-      <File FileName="Assets/WorldObject/Building/Building.cs" Line="136" Column="2" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
