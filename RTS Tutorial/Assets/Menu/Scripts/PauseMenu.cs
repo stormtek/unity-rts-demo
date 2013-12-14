@@ -1,15 +1,12 @@
 using UnityEngine;
 using RTS;
 
-public class PauseMenu : MonoBehaviour {
-	
-	public GUISkin mySkin;
-	public Texture2D header;
-	
+public class PauseMenu : Menu {
+
 	private Player player;
-	private string[] buttons = {"Resume", "Exit Game"};
 	
-	void Start () {
+	protected override void Start () {
+		base.Start();
 		player = transform.root.GetComponent<Player>();
 	}
 	
@@ -17,33 +14,16 @@ public class PauseMenu : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Escape)) Resume();
 	}
 	
-	void OnGUI() {
-		GUI.skin = mySkin;
-		
-		float groupLeft = Screen.width / 2 - ResourceManager.MenuWidth / 2;
-		float groupTop = Screen.height / 2 - ResourceManager.PauseMenuHeight / 2;
-		GUI.BeginGroup(new Rect(groupLeft, groupTop, ResourceManager.MenuWidth, ResourceManager.PauseMenuHeight));
-		
-		//background box
-		GUI.Box(new Rect(0, 0, ResourceManager.MenuWidth, ResourceManager.PauseMenuHeight), "");
-		//header image
-		GUI.DrawTexture(new Rect(ResourceManager.Padding, ResourceManager.Padding, ResourceManager.HeaderWidth, ResourceManager.HeaderHeight), header);
-		
-		//menu buttons
-		float leftPos = ResourceManager.MenuWidth / 2 - ResourceManager.ButtonWidth / 2;
-		float topPos = 2 * ResourceManager.Padding + header.height;
-		for(int i=0; i<buttons.Length; i++) {
-			if(i > 0) topPos += ResourceManager.ButtonHeight + ResourceManager.Padding;
-			if(GUI.Button(new Rect(leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), buttons[i])) {
-				switch(buttons[i]) {
-					case "Resume": Resume(); break;
-					case "Exit Game": ExitGame(); break;
-					default: break;
-				}
-			}
+	protected override void SetButtons () {
+		buttons = new string[] {"Resume", "Exit Game"};
+	}
+	
+	protected override void HandleButton (string text) {
+		switch(text) {
+			case "Resume": Resume(); break;
+			case "Exit Game": ReturnToMainMenu(); break;
+			default: break;
 		}
-		
-		GUI.EndGroup();
 	}
 	
 	private void Resume() {
@@ -54,7 +34,9 @@ public class PauseMenu : MonoBehaviour {
 		ResourceManager.MenuOpen = false;
 	}
 	
-	private void ExitGame() {
-		Application.Quit();
+	private void ReturnToMainMenu() {
+		Application.LoadLevel("MainMenu");
+		Screen.showCursor = true;
 	}
+	
 }
