@@ -4,7 +4,7 @@ using RTS;
 
 public class HUD : MonoBehaviour {
 	
-	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, mouseCursorSkin;
+	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, mouseCursorSkin, playerDetailsSkin;
 	public Texture2D activeCursor;
 	public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor, rallyPointCursor;
 	public Texture2D[] attackCursors, harvestCursors, moveCursors;
@@ -66,6 +66,7 @@ public class HUD : MonoBehaviour {
 	void OnGUI () {
 		//we only want to draw a GUI for human players
 		if(player.human) {
+			DrawPlayerDetails();
 			DrawOrdersBar();
 			DrawResourceBar();
 			//call last to ensure that the custom mouse cursor is seen on top of everything
@@ -140,6 +141,25 @@ public class HUD : MonoBehaviour {
 	}
 	
 	/*** Private Worker Methods ***/
+	
+	private void DrawPlayerDetails() {
+		GUI.skin = playerDetailsSkin;
+		GUI.BeginGroup(new Rect(0, 0, Screen.width, Screen.height));
+		float height = ResourceManager.TextHeight;
+		float leftPos = ResourceManager.Padding;
+		float topPos = Screen.height - height - ResourceManager.Padding;
+		Texture2D avatar = PlayerManager.GetPlayerAvatar();
+		if(avatar) {
+			//we want the texture to be drawn square at all times
+			GUI.DrawTexture(new Rect(leftPos, topPos, height, height), avatar);
+			leftPos += height + ResourceManager.Padding;
+		}
+		float minWidth = 0, maxWidth = 0;
+		string playerName = PlayerManager.GetPlayerName();
+		playerDetailsSkin.GetStyle("label").CalcMinMaxWidth(new GUIContent(playerName), out minWidth, out maxWidth);
+		GUI.Label(new Rect(leftPos, topPos, maxWidth, height), playerName);
+		GUI.EndGroup();
+	}
 	
 	private void DrawOrdersBar() {
 		GUI.skin = ordersSkin;
