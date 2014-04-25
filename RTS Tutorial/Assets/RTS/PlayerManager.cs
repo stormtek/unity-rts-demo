@@ -63,6 +63,17 @@ namespace RTS {
 			return playerNames;
 		}
 		
+		public static string[] GetSavedGames() {
+			DirectoryInfo directory = new DirectoryInfo("SavedGames" + Path.DirectorySeparatorChar + currentPlayer.Name);
+			FileInfo[] files = directory.GetFiles();
+			string[] savedGames = new string[files.Length];
+			for(int i=0; i<files.Length; i++) {
+				string filename = files[i].Name;
+				savedGames[i] = filename.Substring(0, filename.IndexOf("."));
+			}
+			return savedGames;
+		}
+		
 		public static void Save() {
 			JsonSerializer serializer = new JsonSerializer();
 			serializer.NullValueHandling = NullValueHandling.Ignore;

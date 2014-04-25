@@ -44,9 +44,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Menu\Scripts\ConfirmDialog.cs" />
      <Compile Include="Assets\Menu\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Menu\Scripts\Menu.cs" />
      <Compile Include="Assets\Menu\Scripts\PauseMenu.cs" />
+     <Compile Include="Assets\Menu\Scripts\SaveMenu.cs" />
      <Compile Include="Assets\Menu\Scripts\SelectPlayerMenu.cs" />
      <Compile Include="Assets\Player\HUD\HUD.cs" />
      <Compile Include="Assets\Player\Player.cs" />
@@ -55,8 +57,12 @@
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\PlayerManager.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />
+     <Compile Include="Assets\RTS\SaveManager.cs" />
      <Compile Include="Assets\RTS\WorkManager.cs" />
      <Compile Include="Assets\Resources\GameObjectList.cs" />
+     <Compile Include="Assets\Resources\Ground.cs" />
+     <Compile Include="Assets\Resources\LevelLoader.cs" />
+     <Compile Include="Assets\Resources\Sun.cs" />
      <Compile Include="Assets\SelectionList\SelectionList.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
      <Compile Include="Assets\WorldObject\Building\Buildings.cs" />

@@ -16,6 +16,7 @@ namespace RTS {
 		public static Bounds InvalidBounds { get { return invalidBounds; } }
 		
 		public static bool MenuOpen { get; set; }
+		public static string LevelName { get; set; }
 		
 		private static float buttonHeight = 40;
 		private static float headerHeight = 32, headerWidth = 256;
@@ -79,6 +80,12 @@ namespace RTS {
 		public static Texture2D GetResourceHealthBar(ResourceType resourceType) {
 			if(resourceHealthBarTextures != null && resourceHealthBarTextures.ContainsKey(resourceType)) return resourceHealthBarTextures[resourceType];
 			return null;
+		}
+		
+		public static int GetNewObjectId() {
+			LevelLoader loader = (LevelLoader)GameObject.FindObjectOfType(typeof(LevelLoader));
+			if(loader) return loader.GetNewObjectId();
+			return -1;
 		}
 	}
 }

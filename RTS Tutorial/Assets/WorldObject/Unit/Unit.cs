@@ -1,4 +1,5 @@
 using UnityEngine;
+using Newtonsoft.Json;
 using RTS;
 
 public class Unit : WorldObject {
@@ -84,6 +85,18 @@ public class Unit : WorldObject {
 	public void StartMove(Vector3 destination, GameObject destinationTarget) {
 		StartMove(destination);
 		this.destinationTarget = destinationTarget;
+	}
+	
+	public override void SaveDetails (JsonWriter writer) {
+		base.SaveDetails (writer);
+		SaveManager.WriteBoolean(writer, "Moving", moving);
+		SaveManager.WriteBoolean(writer, "Rotating", rotating);
+		SaveManager.WriteVector(writer, "Destination", destination);
+		SaveManager.WriteQuaternion(writer, "TargetRotation", targetRotation);
+		if(destinationTarget) {
+			WorldObject destinationObject = destinationTarget.GetComponent<WorldObject>();
+			if(destinationObject) SaveManager.WriteInt(writer, "DestinationTargetId", destinationObject.ObjectId);
+		}
 	}
 	
 	/* Private worker methods */

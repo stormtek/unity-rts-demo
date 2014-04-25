@@ -1,4 +1,5 @@
 using UnityEngine;
+using Newtonsoft.Json;
 using RTS;
 
 public class Tank : Unit {
@@ -24,6 +25,11 @@ public class Tank : Unit {
 	
 	public override bool CanAttack() {
 		return true;
+	}
+	
+	public override void SaveDetails (JsonWriter writer) {
+		base.SaveDetails (writer);
+		SaveManager.WriteQuaternion(writer, "AimRotation", aimRotation);
 	}
 	
 	protected override void UseWeapon () {
