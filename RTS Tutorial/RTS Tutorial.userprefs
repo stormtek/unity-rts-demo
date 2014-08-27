@@ -1,14 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Player/HUD/HUD.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/WorldObject/Unit/Worker/Worker.cs">
     <Files>
-      <File FileName="Assets/RTS/ResourceManager.cs" Line="86" Column="38" />
-      <File FileName="Assets/RTS/SaveManager.cs" Line="105" Column="3" />
-      <File FileName="Assets/WorldObject/WorldObject.cs" Line="139" Column="82" />
-      <File FileName="Assets/Player/Player.cs" Line="91" Column="4" />
-      <File FileName="Assets/Resources/LevelLoader.cs" Line="35" Column="2" />
-      <File FileName="Assets/WorldObject/Building/Building.cs" Line="149" Column="3" />
-      <File FileName="Assets/Player/HUD/HUD.cs" Line="281" Column="27" />
+      <File FileName="Assets/RTS/ResourceManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/RTS/LoadManager.cs" Line="149" Column="3" />
+      <File FileName="Assets/Player/Player.cs" Line="268" Column="2" />
+      <File FileName="Assets/WorldObject/WorldObject.cs" Line="350" Column="1" />
+      <File FileName="Assets/WorldObject/Building/Building.cs" Line="154" Column="3" />
+      <File FileName="Assets/WorldObject/Unit/Unit.cs" Line="173" Column="1" />
+      <File FileName="Assets/WorldObject/Unit/Harvester/Harvester.cs" Line="178" Column="2" />
+      <File FileName="Assets/WorldObject/Unit/Worker/Worker.cs" Line="99" Column="1" />
+      <File FileName="Assets/RTS/WorkManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/RTS/Enums.cs" Line="1" Column="1" />
+      <File FileName="Assets/Resources/LevelLoader.cs" Line="1" Column="1" />
+      <File FileName="Assets/Player/HUD/HUD.cs" Line="1" Column="1" />
+      <File FileName="Assets/RTS/SaveManager.cs" Line="198" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

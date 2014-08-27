@@ -53,5 +53,18 @@ namespace RTS {
 			if(Physics.Raycast(ray, out hit)) return hit.point;
 			return ResourceManager.InvalidPosition;
 		}
+		
+		public static bool ObjectIsGround(GameObject obj) {
+			return obj && (obj.name == "Ground" || obj.name == "Ground(Clone)");
+		}
+		
+		public static ResourceType GetResourceType(string type) {
+			switch(type) {
+				case "Money": return ResourceType.Money; break;
+				case "Power": return ResourceType.Power; break;
+				case "Ore": return ResourceType.Ore; break;
+				default: return ResourceType.Unknown; break;
+			}
+		}
 	}
 }

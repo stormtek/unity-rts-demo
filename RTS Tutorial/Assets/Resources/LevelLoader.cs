@@ -24,10 +24,14 @@ public class LevelLoader : MonoBehaviour {
 	
 	void OnLevelWasLoaded() {
 		if(initialised) {
-			WorldObject[] worldObjects = GameObject.FindObjectsOfType(typeof(WorldObject)) as WorldObject[];
-			foreach(WorldObject worldObject in worldObjects) {
-				worldObject.ObjectId = nextObjectId++;
-				if(nextObjectId >= int.MaxValue) nextObjectId = 0;
+			if(ResourceManager.LevelName != null && ResourceManager.LevelName != "") {
+				LoadManager.LoadGame(ResourceManager.LevelName);
+			} else {
+				WorldObject[] worldObjects = GameObject.FindObjectsOfType(typeof(WorldObject)) as WorldObject[];
+				foreach(WorldObject worldObject in worldObjects) {
+					worldObject.ObjectId = nextObjectId++;
+					if(nextObjectId >= int.MaxValue) nextObjectId = 0;
+				}
 			}
 		}
 	}

@@ -21,10 +21,12 @@ public class WorldObject : MonoBehaviour {
 	protected float healthPercentage = 1.0f;
 	protected WorldObject target = null;
 	protected bool attacking = false, movingIntoPosition = false, aiming = false;
+	protected bool loadedSavedValues = false;
 	
 	//Private variables
 	private List<Material> oldMaterials = new List<Material>();
 	private float currentWeaponChargeTime;
+	private int loadedTargetId = -1;
 	
 	public int ObjectId { get; set; }
 	
@@ -38,7 +40,13 @@ public class WorldObject : MonoBehaviour {
 	
 	protected virtual void Start () {
 		SetPlayer();
-		if(player) SetTeamColor();
+		if(player) {
+			if(loadedSavedValues) {
+				if(loadedTargetId >= 0) target = player.GetObjectForId(loadedTargetId);
+			} else {
+				SetTeamColor();
+			}
+		}
 	}
 
 	protected virtual void Update () {
@@ -76,7 +84,7 @@ public class WorldObject : MonoBehaviour {
 	
 	public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
 		//only handle input if currently selected
-		if(currentlySelected && hitObject && hitObject.name != "Ground") {
+		if(currentlySelected && !WorkManager.ObjectIsGround(hitObject)) {
 			WorldObject worldObject = hitObject.transform.parent.GetComponent<WorldObject>();
 			//clicked on another selectable object
 			if(worldObject) {
@@ -98,7 +106,7 @@ public class WorldObject : MonoBehaviour {
 		//only handle input if owned by a human player and currently selected
 		if(player && player.human && currentlySelected) {
 			//something other than the ground is being hovered over
-			if(hoverObject.name != "Ground") {
+			if(!WorkManager.ObjectIsGround(hoverObject)) {
 				Player owner = hoverObject.transform.root.GetComponent<Player>();
 				Unit unit = hoverObject.transform.parent.GetComponent<Unit>();
 				Building building = hoverObject.transform.parent.GetComponent<Building>();
@@ -266,7 +274,8 @@ public class WorldObject : MonoBehaviour {
 		GUI.Label(new Rect(selectBox.x, selectBox.y - 7, selectBox.width * healthPercentage, 5), label, healthStyle);
 	}
 	
-	protected void SetTeamColor() {
+	public void SetTeamColor() {
+		if(!player) return;
 		TeamColor[] teamColors = GetComponentsInChildren<TeamColor>();
 		foreach(TeamColor teamColor in teamColors) teamColor.renderer.material.color = player.teamColor;
 	}
@@ -297,5 +306,44 @@ public class WorldObject : MonoBehaviour {
 			SaveManager.WriteFloat(writer, "CurrentWeaponChargeTime", currentWeaponChargeTime);
 		}
 		if(target != null) SaveManager.WriteInt(writer, "TargetId", target.ObjectId);
+	}
+	
+	public void LoadDetails(JsonTextReader reader) {
+		while(reader.Read()) {
+			if(reader.Value != null) {
+				if(reader.TokenType == JsonToken.PropertyName) {
+					string propertyName = (string)reader.Value;
+					reader.Read();
+					HandleLoadedProperty(reader, propertyName, reader.Value);
+				}
+			} else if(reader.TokenType == JsonToken.EndObject) {
+				//loaded position invalidates the selection bounds so they must be recalculated
+				selectionBounds = ResourceManager.InvalidBounds;
+				CalculateBounds();
+				loadedSavedValues = true;
+				return;
+			}
+		}
+		//loaded position invalidates the selection bounds so they must be recalculated
+		selectionBounds = ResourceManager.InvalidBounds;
+		CalculateBounds();
+		loadedSavedValues = true;
+	}
+	
+	protected virtual void HandleLoadedProperty(JsonTextReader reader, string propertyName, object readValue) {
+		switch(propertyName) {
+			case "Name": objectName = (string)readValue; break;
+			case "Id": ObjectId = (int)(System.Int64)readValue; break;
+			case "Position": transform.localPosition = LoadManager.LoadVector(reader); break;
+			case "Rotation": transform.localRotation = LoadManager.LoadQuaternion(reader); break;
+			case "Scale": transform.localScale = LoadManager.LoadVector(reader); break;
+			case "HitPoints": hitPoints = (int)(System.Int64)readValue; break;
+			case "Attacking": attacking = (bool)readValue; break;
+			case "MovingIntoPosition": movingIntoPosition = (bool)readValue; break;
+			case "Aiming": aiming = (bool)readValue; break;
+			case "CurrentWeaponChargeTime": currentWeaponChargeTime = (float)(double)readValue; break;
+			case "TargetId": loadedTargetId = (int)(System.Int64)readValue; break;
+			default: break;
+		}
 	}
 }

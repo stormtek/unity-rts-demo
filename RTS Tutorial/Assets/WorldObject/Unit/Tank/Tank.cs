@@ -32,6 +32,14 @@ public class Tank : Unit {
 		SaveManager.WriteQuaternion(writer, "AimRotation", aimRotation);
 	}
 	
+	protected override void HandleLoadedProperty (JsonTextReader reader, string propertyName, object readValue) {
+		base.HandleLoadedProperty (reader, propertyName, readValue);
+		switch(propertyName) {
+			case "AimRotation": aimRotation = LoadManager.LoadQuaternion(reader); break;
+			default: break;
+		}
+	}
+	
 	protected override void UseWeapon () {
 		base.UseWeapon();
 		Vector3 spawnPoint = transform.position;
