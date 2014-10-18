@@ -12,6 +12,8 @@ public class HUD : MonoBehaviour {
 	public Texture2D buttonHover, buttonClick, smallButtonHover, smallButtonClick;
 	public Texture2D buildFrame, buildMask;
 	public Texture2D healthy, damaged, critical;
+	public AudioClip clickSound;
+	public float clickVolume = 1.0f;
 	
 	private Player player;
 	private CursorState activeCursorState, previousCursorState;
@@ -20,6 +22,7 @@ public class HUD : MonoBehaviour {
 	private Dictionary<ResourceType,Texture2D> resourceImages;
 	private WorldObject lastSelection;
 	private float sliderValue;
+	private AudioElement audioElement;
 	
 	private const int ORDERS_BAR_WIDTH = 150, RESOURCE_BAR_HEIGHT = 40;
 	private const int SELECTION_NAME_HEIGHT = 15, SCROLL_BAR_WIDTH = 22, BUTTON_SPACING = 7;
@@ -61,6 +64,11 @@ public class HUD : MonoBehaviour {
 		buildAreaHeight = Screen.height - RESOURCE_BAR_HEIGHT - SELECTION_NAME_HEIGHT - 2 * BUTTON_SPACING;
 		ResourceManager.StoreSelectBoxItems(selectBoxSkin, healthy, damaged, critical);
 		SetCursorState(CursorState.Select);
+		List<AudioClip> sounds = new List<AudioClip>();
+		List<float> volumes = new List<float>();
+		sounds.Add(clickSound);
+		volumes.Add (clickVolume);
+		audioElement = new AudioElement(sounds, volumes, "HUD", null);
 	}
 
 	void OnGUI () {
@@ -208,11 +216,18 @@ public class HUD : MonoBehaviour {
 			if(action) {
 				//create the button and handle the click of that button
 				if(GUI.Button(pos, action)) {
-					if(player.SelectedObject) player.SelectedObject.PerformAction(actions[i]);
+					if(player.SelectedObject) {
+						PlayClick();
+						player.SelectedObject.PerformAction(actions[i]);
+					}
 				}
 			}
 		}
 		GUI.EndGroup();
+	}
+	
+	private void PlayClick() {
+		if(audioElement != null) audioElement.Play(clickSound);
 	}
 	
 	private int MaxNumRows(int areaHeight) {
@@ -262,11 +277,13 @@ public class HUD : MonoBehaviour {
 		int width = BUILD_IMAGE_WIDTH / 2;
 		int height = BUILD_IMAGE_HEIGHT / 2;
 		if(GUI.Button(new Rect(leftPos, topPos, width, height), building.sellImage)) {
+			PlayClick();
 			building.Sell();
 		}
 		if(building.hasSpawnPoint()) {
 			leftPos += width + BUTTON_SPACING;
 			if(GUI.Button(new Rect(leftPos, topPos, width, height), building.rallyPointImage)) {
+				PlayClick();
 				if(activeCursorState != CursorState.RallyPoint && previousCursorState != CursorState.RallyPoint) SetCursorState(CursorState.RallyPoint);
 				else {
 					//dirty hack to ensure toggle between RallyPoint and not works ...
@@ -295,6 +312,7 @@ public class HUD : MonoBehaviour {
 		Rect menuButtonPosition = new Rect(leftPos, padding, buttonWidth, buttonHeight);
 		
 		if(GUI.Button(menuButtonPosition, "Menu")) {
+			PlayClick();
 			Time.timeScale = 0.0f;
 			PauseMenu pauseMenu = GetComponent<PauseMenu>();
 			if(pauseMenu) pauseMenu.enabled = true;

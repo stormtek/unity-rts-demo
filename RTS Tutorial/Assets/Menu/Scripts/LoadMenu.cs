@@ -1,12 +1,24 @@
 using UnityEngine;
+using System.Collections.Generic;
 using RTS;
 
 public class LoadMenu : MonoBehaviour {
 
 	public GUISkin mainSkin, selectionSkin;
+	public AudioClip clickSound;
+	public float clickVolume = 1.0f;
+	
+	private AudioElement audioElement;
 
 	void Start() {
 		Activate();
+		if(clickVolume < 0.0f) clickVolume = 0.0f;
+		if(clickVolume > 1.0f) clickVolume = 1.0f;
+		List<AudioClip> sounds = new List<AudioClip>();
+		List<float> volumes = new List<float>();
+		sounds.Add(clickSound);
+		volumes.Add (clickVolume);
+		audioElement = new AudioElement(sounds, volumes, "LoadMenu", null);
 	}
 	
 	void Update() {
@@ -14,7 +26,10 @@ public class LoadMenu : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-		if(SelectionList.MouseDoubleClick()) StartLoad();
+		if(SelectionList.MouseDoubleClick()) {
+			PlayClick();
+			StartLoad();
+		}
 		
 		GUI.skin = mainSkin;
 		float menuHeight = GetMenuHeight();
@@ -28,10 +43,12 @@ public class LoadMenu : MonoBehaviour {
 		float leftPos = ResourceManager.Padding;
 		float topPos = menuHeight - ResourceManager.Padding - ResourceManager.ButtonHeight;
 		if(GUI.Button(new Rect(leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Load Game")) {
+			PlayClick();
 			StartLoad();
 		}
 		leftPos += ResourceManager.ButtonWidth + ResourceManager.Padding;
 		if(GUI.Button(new Rect(leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Cancel")) {
+			PlayClick();
 			CancelLoad();
 		}
 		GUI.EndGroup();
@@ -42,6 +59,10 @@ public class LoadMenu : MonoBehaviour {
 		float selectionWidth = groupRect.width - 2 * ResourceManager.Padding;
 		float selectionHeight = groupRect.height - GetMenuItemsHeight() - ResourceManager.Padding;
 		SelectionList.Draw(selectionLeft,selectionTop,selectionWidth,selectionHeight,selectionSkin);
+	}
+	
+	private void PlayClick() {
+		if(audioElement != null) audioElement.Play(clickSound);
 	}
 	
 	private float GetMenuHeight() {

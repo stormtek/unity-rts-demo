@@ -7,6 +7,8 @@ public class Building : WorldObject {
 	
 	public float maxBuildProgress = 10.0f;
 	public Texture2D rallyPointImage, sellImage;
+	public AudioClip finishedJobSound;
+	public float finishedJobVolume = 1.0f;
 	
 	protected Vector3 spawnPoint, rallyPoint;
 	protected Queue<string> buildQueue;
@@ -29,6 +31,17 @@ public class Building : WorldObject {
 		base.Start();
 	}
 	
+	protected override void InitialiseAudio () {
+		base.InitialiseAudio ();
+		if(finishedJobVolume < 0.0f) finishedJobVolume = 0.0f;
+		if(finishedJobVolume > 1.0f) finishedJobVolume = 1.0f;
+		List<AudioClip> sounds = new List<AudioClip>();
+		List<float> volumes = new List<float>();
+		sounds.Add(finishedJobSound);
+		volumes.Add (finishedJobVolume);
+		audioElement.Add(sounds, volumes);
+	}
+	
 	protected override void Update () {
 		base.Update();
 		ProcessBuildQueue();
@@ -49,7 +62,10 @@ public class Building : WorldObject {
 		if(buildQueue.Count > 0) {
 			currentBuildProgress += Time.deltaTime * ResourceManager.BuildSpeed;
 			if(currentBuildProgress > maxBuildProgress) {
-				if(player) player.AddUnit(buildQueue.Dequeue(), spawnPoint, rallyPoint, transform.rotation, this);
+				if(player) {
+					player.AddUnit(buildQueue.Dequeue(), spawnPoint, rallyPoint, transform.rotation, this);
+					if(audioElement != null) audioElement.Play(finishedJobSound);
+				}
 				currentBuildProgress = 0.0f;
 			}
 		}

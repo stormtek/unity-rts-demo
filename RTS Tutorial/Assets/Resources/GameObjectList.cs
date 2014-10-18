@@ -14,6 +14,7 @@ public class GameObjectList : MonoBehaviour {
 	public GameObject[] units;
 	public GameObject[] worldObjects;
 	public GameObject player;
+	public Texture2D[] avatars;
 	
 	private static bool created = false;
 	
@@ -21,6 +22,8 @@ public class GameObjectList : MonoBehaviour {
 		if(!created) {
 			DontDestroyOnLoad(transform.gameObject);
 			ResourceManager.SetGameObjectList(this);
+			PlayerManager.Load();
+			PlayerManager.SetAvatarTextures(avatars);
 			created = true;
 		} else {
 			Destroy(this.gameObject);
@@ -64,5 +67,9 @@ public class GameObjectList : MonoBehaviour {
 			if(unit && unit.name == name) return unit.buildImage;
 		}
 		return null;
+	}
+	
+	public Texture2D[] GetAvatars() {
+		return avatars;
 	}
 }

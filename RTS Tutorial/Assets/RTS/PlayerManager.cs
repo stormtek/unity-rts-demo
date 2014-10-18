@@ -33,7 +33,7 @@ namespace RTS {
 				}
 			}
 			if(!playerExists) {
-				PlayerDetails newPlayer = new PlayerDetails(name ,avatar);
+				PlayerDetails newPlayer = new PlayerDetails(name, avatar);
 				players.Add(newPlayer);
 				currentPlayer = newPlayer;
 				Directory.CreateDirectory("SavedGames" + Path.DirectorySeparatorChar + name);
@@ -53,6 +53,7 @@ namespace RTS {
 		}
 		
 		public static Texture2D GetPlayerAvatar() {
+			if(avatars == null) return null;
 			if(currentPlayer.Avatar >= 0 && currentPlayer.Avatar < avatars.Length) return avatars[currentPlayer.Avatar];
 			return null;
 		}

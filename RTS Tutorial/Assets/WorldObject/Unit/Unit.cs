@@ -1,10 +1,13 @@
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using RTS;
 
 public class Unit : WorldObject {
 	
 	public float moveSpeed = 5, rotateSpeed = 2;
+	public AudioClip driveSound, moveSound;
+	public float driveVolume = 0.5f, moveVolume = 1.0f;
 	
 	protected bool moving, rotating;
 	
@@ -24,6 +27,21 @@ public class Unit : WorldObject {
 		if(player && loadedSavedValues && loadedDestinationTargetId >= 0) {
 			destinationTarget = player.GetObjectForId(loadedDestinationTargetId).gameObject;
 		}
+	}
+	
+	protected override void InitialiseAudio () {
+		base.InitialiseAudio ();
+		List<AudioClip> sounds = new List<AudioClip>();
+		List<float> volumes = new List<float>();
+		if(driveVolume < 0.0f) driveVolume = 0.0f;
+		if(driveVolume > 1.0f) driveVolume = 1.0f;
+		volumes.Add(driveVolume);
+		sounds.Add(driveSound);
+		if(moveVolume < 0.0f) moveVolume = 0.0f;
+		if(moveVolume > 1.0f) moveVolume = 1.0f; 
+		sounds.Add(moveSound);
+		volumes.Add(moveVolume);
+		audioElement.Add(sounds, volumes);
 	}
 	
 	protected override void Update () {
@@ -78,6 +96,7 @@ public class Unit : WorldObject {
 	}
 	
 	public virtual void StartMove(Vector3 destination) {
+		if(audioElement != null) audioElement.Play (moveSound);
 		this.destination = destination;
 		destinationTarget = null;
 		targetRotation = Quaternion.LookRotation (destination - transform.position);
@@ -126,6 +145,7 @@ public class Unit : WorldObject {
 			rotating = false;
 			moving = true;
 			if(destinationTarget) CalculateTargetDestination();
+			if(audioElement != null) audioElement.Play(driveSound);
 		}
 	}
 	
@@ -166,6 +186,7 @@ public class Unit : WorldObject {
 		if(transform.position == destination) {
 			moving = false;
 			movingIntoPosition = false;
+			if(audioElement != null) audioElement.Stop(driveSound);
 		}
 		CalculateBounds();
 	}

@@ -44,6 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Audio\AudioElement.cs" />
      <Compile Include="Assets\Menu\Scripts\ConfirmDialog.cs" />
      <Compile Include="Assets\Menu\Scripts\LoadMenu.cs" />
      <Compile Include="Assets\Menu\Scripts\MainMenu.cs" />
