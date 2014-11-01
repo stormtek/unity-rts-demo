@@ -167,7 +167,7 @@ public class Harvester : Unit {
 	}
 	
 	private void Collect() {
-		if(audioElement != null) audioElement.Play(harvestSound);
+		if(audioElement != null && Time.timeScale > 0) audioElement.Play(harvestSound);
 		float collect = collectionAmount * Time.deltaTime;
 		//make sure that the harvester cannot collect more than it can carry
 		if(currentLoad + collect > capacity) collect = capacity - currentLoad;
@@ -176,7 +176,7 @@ public class Harvester : Unit {
 	}
 	
 	private void Deposit() {
-		if(audioElement != null) audioElement.Play(emptyHarvestSound);
+		if(audioElement != null && Time.timeScale > 0) audioElement.Play(emptyHarvestSound);
 		currentDeposit += depositAmount * Time.deltaTime;
 		int deposit = Mathf.FloorToInt(currentDeposit);
 		if(deposit >= 1) {

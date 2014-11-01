@@ -55,6 +55,9 @@ public class Building : WorldObject {
 	/*** Internal worker methods that can be accessed by subclass ***/
 	
 	protected void CreateUnit(string unitName) {
+		GameObject unit = ResourceManager.GetUnit(unitName);
+		Unit unitObject = unit.GetComponent<Unit>();
+		if(player && unitObject) player.RemoveResource(ResourceType.Money, unitObject.cost);
 		buildQueue.Enqueue(unitName);
 	}
 	

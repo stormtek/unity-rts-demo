@@ -18,7 +18,7 @@ public class Worker : Unit {
 	
 	protected override void Start () {
 		base.Start();
-		actions = new string[] {"Refinery", "WarFactory"};
+		actions = new string[] {"Refinery", "WarFactory", "Wonder"};
 		if(player && loadedSavedValues && loadedProjectId >= 0) {
 			WorldObject obj = player.GetObjectForId(loadedProjectId);
 			if(obj.GetType().IsSubclassOf(typeof(Building))) currentProject = (Building)obj;

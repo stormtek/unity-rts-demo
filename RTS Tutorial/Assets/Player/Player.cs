@@ -63,6 +63,14 @@ public class Player : MonoBehaviour {
 	
 	/*** Public Methods ***/
 	
+	public int GetResourceAmount(ResourceType type) {
+		return resources[type];
+	}
+	
+	public void RemoveResource(ResourceType type, int amount) {
+		resources[type] -= amount;
+	}
+	
 	public void AddResource(ResourceType type, int amount) {
 		resources[type] += amount;
 	}
@@ -148,6 +156,7 @@ public class Player : MonoBehaviour {
 		tempBuilding.SetColliders(true);
 		tempCreator.SetBuilding(tempBuilding);
 		tempBuilding.StartConstruction();
+		RemoveResource(ResourceType.Money, tempBuilding.cost);
 	}
 	
 	public void CancelBuildingPlacement() {
@@ -264,5 +273,13 @@ public class Player : MonoBehaviour {
 			if(obj.ObjectId == id) return obj;
 		}
 		return null;
+	}
+	
+	public bool IsDead() {
+		Building[] buildings = GetComponentsInChildren<Building>();
+		Unit[] units = GetComponentsInChildren<Unit>();
+		if(buildings != null && buildings.Length > 0) return false;
+		if(units != null && units.Length > 0) return false;
+		return true;
 	}
 }
