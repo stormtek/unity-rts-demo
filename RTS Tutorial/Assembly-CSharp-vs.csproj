@@ -78,6 +78,8 @@
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
      <Compile Include="Assets\WorldObject\Building\Buildings.cs" />
      <Compile Include="Assets\WorldObject\Building\Refinery\Refinery.cs" />
+     <Compile Include="Assets\WorldObject\Building\Turret\Turret.cs" />
+     <Compile Include="Assets\WorldObject\Building\Turret\TurretProjectile.cs" />
      <Compile Include="Assets\WorldObject\Building\WarFactory\WarFactory.cs" />
      <Compile Include="Assets\WorldObject\Building\Wonder\Wonder.cs" />
      <Compile Include="Assets\WorldObject\Projectile.cs" />

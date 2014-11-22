@@ -98,6 +98,7 @@ public class Player : MonoBehaviour {
 			tempBuilding.ObjectId = ResourceManager.GetNewObjectId();
 			tempCreator = creator;
 			findingPlacement = true;
+			tempBuilding.hitPoints = 0;
 			tempBuilding.SetTransparentMaterial(notAllowedMaterial, true);
 			tempBuilding.SetColliders(false);
 			tempBuilding.SetPlayingArea(playingArea);

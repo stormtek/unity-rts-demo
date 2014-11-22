@@ -134,6 +134,11 @@ public class Unit : WorldObject {
 		}
 	}
 	
+	protected override bool ShouldMakeDecision () {
+		if(moving || rotating) return false;
+		return base.ShouldMakeDecision();
+	}
+	
 	/* Private worker methods */
 	
 	private void TurnToTarget() {
