@@ -16,6 +16,7 @@ public class UserInput : MonoBehaviour {
 		if(player && player.human) {
 			if(Input.GetKeyDown(KeyCode.Escape)) OpenPauseMenu();
 			MoveCamera();
+            KeyBoardMoveCamera();
 			RotateCamera();
 			MouseActivity();
 		}
@@ -28,7 +29,75 @@ public class UserInput : MonoBehaviour {
 		Screen.showCursor = true;
 		ResourceManager.MenuOpen = true;
 	}
-	
+
+    private void KeyBoardMoveCamera() //imitates mouse movement
+    {
+        float xpos = Input.mousePosition.x;
+        float ypos = Input.mousePosition.y;
+        Vector3 movement = new Vector3(0, 0, 0);
+        bool mouseScroll = false;
+
+        //vertical movement
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            movement.z -= ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState(CursorState.PanDown);
+            mouseScroll = true;
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            movement.z += ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState(CursorState.PanUp);
+            mouseScroll = true;
+        }
+
+        //horizontal movement
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            movement.x -= ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState(CursorState.PanLeft);
+            mouseScroll = true;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            movement.x += ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState(CursorState.PanRight);
+            mouseScroll = true;
+        }
+        //Taken from MoveCamera() Function
+
+        //make sure movement is in the direction the camera is pointing
+        //but ignore the vertical tilt of the camera to get sensible scrolling
+        movement = Camera.mainCamera.transform.TransformDirection(movement);
+        movement.y = 0;
+
+        //away from ground movement
+        movement.y -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
+
+        //calculate desired camera position based on received input
+        Vector3 origin = Camera.mainCamera.transform.position;
+        Vector3 destination = origin;
+        destination.x += movement.x;
+        destination.y += movement.y;
+        destination.z += movement.z;
+
+        //limit away from ground movement to be between a minimum and maximum distance
+        if (destination.y > ResourceManager.MaxCameraHeight)
+        {
+            destination.y = ResourceManager.MaxCameraHeight;
+        }
+        else if (destination.y < ResourceManager.MinCameraHeight)
+        {
+            destination.y = ResourceManager.MinCameraHeight;
+        }
+
+        //if a change in position is detected perform the necessary update
+        if (destination != origin)
+        {
+            Camera.mainCamera.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed);
+        }
+
+    }
 	private void MoveCamera() {
 		float xpos = Input.mousePosition.x;
 		float ypos = Input.mousePosition.y;
